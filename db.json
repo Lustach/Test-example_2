@@ -1,0 +1,49 @@
+{
+    "todos":[
+        {
+            "id": 0,
+            "name": "vlados"
+        },
+        {
+            "id": 1,
+            "name": "archer"
+        },
+        {
+            "id": 2,
+            "name": "kvaks"
+        },
+        {
+            "id": 3,
+            "name": "dick"
+        },
+        {
+            "id": 4,
+            "name": "nexus"
+        }
+    ],
+    "users": [{
+        "id": 1,
+        "name": "roy",
+        "location": "india"
+    }, {
+        "id": 2,
+        "name": "sam",
+        "location": "wales"
+    }],
+    "posts": [
+        {
+          "title": "CopyRight Automatico",
+          "tags": "[JS]"
+        },
+        {
+          "title": "HtmlWebpackPlugin Multiples HTML files",
+          "tags": "[JS, webpack]"
+        }
+      ],
+      "photos": [
+          {
+              
+          }
+
+      ]
+}
