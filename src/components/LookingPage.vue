@@ -1,13 +1,16 @@
 <template>
+<div>
+    jopaaaaaaaa
     <v-card @click="infor">
 
     </v-card>
+</div>
 </template>
 <script>
 export default {
-    data:()=>{
-
-    },
+    data:()=>({
+        some:'hell'
+    }),
     methods:{
         infor(){
             console.log('Hui')

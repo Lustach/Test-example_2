@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <div class="zaglushka" @click="drawer = !drawer" v-if="drawer">
-      f
+    <div class="zaglushka" @click="ChangeDrawer" v-if="drawer">
+      
     </div>
-    <v-app-bar app color="primary" dark absolute>
-      <v-btn text @click.stop="drawer = !drawer">
+    <v-app-bar app color="primary" dark fixed>
+      <v-btn text @click.stop="ChangeDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-flex justify-center row>
@@ -26,25 +26,27 @@
 
         <v-divider></v-divider>
 
-        <v-list dense nav>
-          <v-list-item v-for="(item,index) in items" :key="index" link>
+        <v-list dense nav v-for="(item,index) in items" :key="index">
+          <router-link :to="item.link"><v-list-item   link>
             <!-- <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon> -->
             <!-- <v-list-item-content> -->
-              <router-link to="/LookingPage"><v-list-item-title ><h1>{{item.title}}</h1></v-list-item-title></router-link>
+              <v-list-item-title @click="ChangeDrawer"><h1>{{item.title}}</h1></v-list-item-title>
               <!-- <router-link to="/LookingPage">
                 <div class="padInSideBar"><p v-for="(page,index) in article" :key="index" class=" white--text" @click="infor(index)">{{page.header}}</p></div>
               </router-link> -->
             <!-- </v-list-item-content> -->
-          </v-list-item>
+          </v-list-item></router-link>
         </v-list>
       </v-navigation-drawer>
     </div>
     
-    <v-content>
-      <MainBanner />
+    <v-content class="pl-7">
+      <router-view ></router-view>
     </v-content>
+
+     <!-- style="padding-bottom:100px !important;" -->
   </v-app>
 </template>
 
@@ -61,10 +63,15 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { title: "Избранное", },
-      { title: "Статьи",}
+      { title: "Избранное", link:'/Favourite' },
+      { title: "Статьи", link:'LookingPage'}
     ]
-  })
+  }),
+methods:{
+  ChangeDrawer(){
+    this.drawer = !this.drawer
+  }
+}
 };
 </script>
 <style lang="scss">
