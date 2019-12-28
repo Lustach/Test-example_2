@@ -117,7 +117,7 @@ export default {
         }
       else
         {
-          getBanner=true
+          this.getBanner=true
           localStorage.removeItem(index.id)
         }
     },
