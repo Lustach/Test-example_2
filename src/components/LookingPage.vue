@@ -1,6 +1,6 @@
 <template>
 <div>
-    jopaaaaaaaa
+    Hello
     <v-card @click="infor">
 
     </v-card>
@@ -12,9 +12,8 @@ export default {
         some:'hell'
     }),
     methods:{
-        infor(){
-            console.log('Hui')
-        }
+        // infor(){
+        // }
     },
 }
 </script>

@@ -36,11 +36,10 @@
             </v-img>
             <v-card-text class="d-flex justify-space-between align-center pr-0">
               <router-link to="/LookingPage">{{ i.name }}</router-link>
-              <v-btn text @click="AddToFavourite(i)">
-                <v-icon :v-model="index" :color="GetFavouriteId[index]==i.id ? 'orange ' : 'black'">mdi-star</v-icon>
+              <v-btn text :v-model="index" @click="i.favourite= !i.favourite, AddToFavourite(i)">
+                <v-icon  :color="i.favourite ? 'orange ' : 'black'">mdi-star</v-icon>
               </v-btn></v-card-text
             >
-            {{index}}
           </v-card>
         </v-hover>
       </v-col>
@@ -54,7 +53,8 @@
       ></v-pagination>
     </div>
     <v-flex row justify-center>
-      <p>{{ info.data }}</p>
+      <!-- <p>{{ info.data }}</p> -->
+      {{arr}}
     </v-flex>
   </div>
 </template>
@@ -72,19 +72,26 @@ export default {
       .then(response => {
         setTimeout(() => {
           this.info = response;
+          for (let i = 0; i < this.info.data.length; i++) {
+            if(Number.isInteger(JSON.parse(localStorage.getItem(i))))
+              this.info.data[i].favourite=true
+          }
         });
       }, 1000)
       .catch(error => {
-        console.log(this.info.data.src);
       })
       .finally((this.loading = false));
   },
   data: () => ({
+    favourite:[],
     info: "",
     loading: "true",
     page: 0,
     per_page: 12,
     totalPhotos: "",
+    arr:[],
+    JsonParseOnce:false,
+    getBanner:null,
     items: [
       {
         src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
@@ -103,14 +110,17 @@ export default {
   methods: {
     ...mapMutations(["AddToFavourite"]),
     AddToFavourite(index) {
-      this.$store.commit("AddToFavourite", index);
-    }
-    // showPage(arg){
-    //   this.$store.commit("ShowPage",arg)
-    // },
-    //   infor(or) {
-    //     this.$store.commit("Info", or);
-    // }
+      if(localStorage.getItem(index.id)==null)
+        {
+          this.arr.push(index.id)
+          localStorage.setItem(`${index.id}`,index.id)
+        }
+      else
+        {
+          getBanner=true
+          localStorage.removeItem(index.id)
+        }
+    },
   },
   computed:{
     ...mapGetters(["GetFavouriteId"])
