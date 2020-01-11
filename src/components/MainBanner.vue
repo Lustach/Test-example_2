@@ -40,7 +40,8 @@
               <router-link :to="{ name: 'post', params: { id: index } }">{{
                 i.name
               }}</router-link>
-              <v-btn text :v-model="index" @click="AddToFavourite(i)">
+              <v-btn text @click="AddToFavourite(i)"
+                >{{ i.id }}
                 {{ i.favourite }}
                 <v-icon :color="i.favourite ? 'orange ' : 'black'"
                   >mdi-star</v-icon
@@ -51,8 +52,7 @@
         </v-hover>
       </v-col>
     </v-flex>
-    <div class="text-center">
-      <!-- <v-pagination
+    <!-- <v-pagination
         :v-model="this.payload.page"
         :length="this.info.data.length"
         :total-visible="this.payload.limit"
@@ -61,7 +61,7 @@
         :next="nextPage"
         :previous="prevPage"
       ></v-pagination> -->
-      <!-- <div class="card text-center m-3">
+    <!-- <div class="card text-center m-3">
         <h3 class="card-header">Vue.js Pagination Tutorial & Example</h3>
         <div class="card-body">
             <div v-for="item in pageOfItems" :key="item.id">{{item.name}}</div>
@@ -70,10 +70,21 @@
             <jw-pagination :items="exampleItems" @changePage="onChangePage"></jw-pagination>
         </div>
     </div> -->
-    </div>
+
     <v-flex row justify-center>
       <!-- <p>{{ info.data }}</p> -->
-      {{ favourite }}
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="20"
+        :total="800"
+        :pager-count="8"
+        current-page=""
+
+      >
+              <!-- :prev-click="PrevClick"
+        :next-click="NextClick" -->
+      </el-pagination>
     </v-flex>
     <p @click="GotoCard">Card</p>
   </div>
@@ -95,32 +106,21 @@ export default {
       .catch(error => {})
       .finally((this.loading = false));
 
-    this.$http.get(url + `favourite`).then(response => {
-      this.favourite = response.data;
-      console.log(this.favourite, "FAVOURITE!");
+    this.$http.get(url + `favourite`).then(async response => {
+      this.favourite = await response.data;
+      console.log(response.data, "FAVOURITE!");
       for (let i = 0; i < this.favourite.length; i++) {
-        this.info[this.favourite[i].id].favourite=true
+        console.log(this.favourite.length);
+        // console.log(
+        //   this.info[this.favourite[i].id].favourite,
+        //   "this.info[this.favourite[i].id].favourite"
+        // );
+        // console.log(this.favourite[i].id,this.favourite[i].id);
+        // console.log(this.info[this.favourite[i].id - 1].favourite);
+        this.info[this.favourite[i].id - 1].favourite = true;
+        console.log(this.info[this.favourite[i].id - 1].favourite);
       }
     });
-
-    // .get(url)
-    // .then(response => {
-    //   setTimeout(() => {
-    //     this.info = response;
-    //     console.log(response, "response");
-    //     for (let i = 0; i < this.info.data.length; i++) {
-    //       if (Number.isInteger(JSON.parse(localStorage.getItem(i)))) {
-    //         this.info.data[i].favourite = true;
-    //         this.favourite.push(this.info.data[i]);
-    //       }
-    //     }
-    //     this.SetListFavourite();
-    //   });
-    // }, 1000)
-    // .catch(error => {})
-    // .finally((this.loading = false));
-    // console.log(this.getPagination(),'th')
-    // this.getPagination();
   },
   created() {},
   data: () => ({
@@ -129,7 +129,7 @@ export default {
     favourite: [],
     info: [],
     loading: "true",
-    page: 0,
+    page: 1,
     totalPhotos: "",
     arr: [],
     JsonParseOnce: false,
@@ -143,37 +143,41 @@ export default {
     ...mapMutations(["AddToFavourite", "SetListFavourite"]),
     AddToFavourite(index) {
       //index- объект со всеми полями
+      console.log(this.favourite, "index");
       console.log(index.favourite, "This Favor");
       if (index.favourite == false) {
         console.log(index.favourite, "indexFavo");
-        this.$http.post(`http://localhost:3000/favourite`, { id: index.id });
-        this.info[index.id].favourite = true;
+        console.log(index.id, "index.id");
+        this.$http
+          .post(`http://localhost:3000/favourite`, { id: index.id })
+          .then(response => {
+            console.log(response, "AAAAAAAAAAAAAAAA");
+            this.info[index.id - 1].favourite = true;
+          });
+        // this.info[index.id].favourite = true;
         console.log(this.favourite, "This Favor1");
       } else {
-        this.info[index.id].favourite=false
+        this.info[index.id - 1].favourite = false;
         this.$http.delete(`http://localhost:3000/favourite/${index.id}`);
-        this.favourite.splice(index, 1);
+        this.favourite.splice(index - 1, 1);
         console.log(this.favourite, "This Favor2");
       }
-      // if (localStorage.getItem(index.id) == null) {
-      //   this.arr.push(index.id);
-      //   localStorage.setItem(`${index.id}`, index.id);
-      //   this.favourite.push(index);
-      // } else {
-      //   this.favourite.splice(index, 1);
-      //   this.getBanner = true;
-      //   localStorage.removeItem(index.id);
-      // }
     },
     SetListFavourite() {
       this.$store.commit("SetListFavourite", this.favourite);
     },
     GotoCard() {
       console.log(navigator.userAgent, "agent");
+    },
+    PrevClick() {
+      console.log("PrevClick");
+    },
+    NextClick() {
+      console.log("NextClick");
     }
   },
   computed: {
-    ...mapGetters(["GetFavouriteId"]),
+    // ...mapGetters([]),
     rows() {
       console.log(this.info, "THISINFOBRO");
       return Math.ceil(this.info.length / this.perPage);

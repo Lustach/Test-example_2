@@ -13,7 +13,7 @@
               cols="4"
             >
               <v-card flat tile class="d-flex">
-                <v-img :src="item.src" aspect-ratio="1" class="grey lighten-2">
+                <v-img :src="item.src" aspect-ratio="1" class="grey lighten-2" >
                   <template v-slot:placeholder>
                     <v-row
                       class="fill-height ma-0"
@@ -30,8 +30,14 @@
                     <router-link
                       :to="{ name: 'post', params: { id: item.id } }"
                       >{{ item.name }}</router-link
-                    ></v-card-title
-                  >
+                    >
+                    <v-divider style="opacity:0;"></v-divider>
+                    <v-btn text @click="DeleteFavourite(item.id,n)">
+                      <v-icon :color="item.favourite ? 'orange' : 'black'">
+                        mdi-star
+                      </v-icon><!--(i.favourite = !i.favourite), -->
+                    </v-btn>
+                  </v-card-title>
                 </v-img>
               </v-card>
             </v-col>
@@ -59,6 +65,8 @@ export default {
           .get(url + "articles" + `/${this.favourite[i].id}`)
           .then(response => {
             this.info.push(response.data);
+            this.info[this.info.length-1].favourite=true
+            console.log(this.info,'this.info')
             console.log(response.data, "response.data");
           });
       }
@@ -77,6 +85,10 @@ export default {
     ...mapGetters(["GetFavourite"])
   },
   methods: {
+    DeleteFavourite(index,n){
+        this.$http.delete(`http://localhost:3000/favourite/${index}`);
+        this.info.splice(n, 1);
+    },
     post() {
       // .post(`http://localhost:3000/favourite`, this.obj)
       // .then(function(response) {

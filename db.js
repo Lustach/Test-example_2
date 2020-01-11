@@ -4,7 +4,7 @@ module.exports = () => {
     favourite: [],
   };
   // Create 1000 users
-  for (let i = 0; i < 10; i++) {
+  for (let i = 1; i <= 20; i++) {
     data.articles.push({
       id: i,
       name: `Статья №${i}`,
