@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import LookingPage from '../components/LookingPage.vue'
 import MainBanner from '../components/MainBanner.vue'
 import Favourite from '../components/Favourite.vue'
+import Card from '../components/Card.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,6 +20,10 @@ const routes = [
     path:'/Favourite',
     component: Favourite,
   },
+  {
+    path:'/card',
+    component:Card,
+  },
   // {
   //   path: '/about',
   //   name: 'about',
@@ -28,8 +33,8 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // },
   {
-    path: '/LookingPage',
-    name: 'LookingPage',
+    path: '/post/:id',
+    name: 'post',
     component: LookingPage
   }
 

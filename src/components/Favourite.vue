@@ -33,53 +33,56 @@
             </v-col>
           </v-row>
           <v-row v-else>
-            <v-col class="d-flex justify-center align-center" @click="addCat"
+            <v-col class="d-flex justify-center align-center"
               >Пока что, здесь ничего нет....</v-col
             >
           </v-row>
         </v-container>
       </v-card>
     </v-col>
+    <p @click="post">Hell</p>{{favourite.data}}
   </v-row>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
-    mounted() {
-        
-        if (localStorage.getItem('cats')){
-            try {
-                this.GetFavourite = JSON.parse(localStorage.getItem('cats'));
-            } catch(e) {
-                localStorage.removeItem('cats');
-            }
-        }
-    },
-    data:() =>({
-        cats:[],
-        newCat: null,
-        obj:{
-        item1: 1,
-        item2: [123, "two", 3.0],
-        item3:"hello"
-        },
-    }),
-    computed:{
-        ...mapGetters(["GetFavourite"])
-    },
- methods: {
-     addCat(){
-        let serialObj = JSON.stringify(this.obj);
-        localStorage.setItem("myKey", serialObj);
-     },
-    removeCat(x) {
-      this.cats.splice(x, 1);
-      this.saveCats();
-    },
-    saveCats() {
-      const parsed = JSON.stringify(this.cats);
-      localStorage.setItem('cats', parsed);
+  created() {
+    let url = "http://localhost:3000/articles";
+    this.$http.get(url).then(response => {
+      this.info = response;
+      // console.log(response.data.length,'res.length')
+    });
+    this.$http.get(`http://localhost:3000/favourite`).then(response => {
+      this.favourite = response;
+    });
+    console.log(this.favourite, "favori");
+    // for (let i = 0; i < this.info.length; i++) {
+    //   if (Number.isInteger(JSON.parse(localStorage.getItem(i)))) {
+    //     this.favourite.push(this.info.data[i]);
+    //   }
+    // }
+  },
+  data: () => ({
+    info: [],
+    favourite: [],
+    newCat: null,
+    obj: {
+      item1: 1,
+      item2: [123, "two", 3.0],
+      item3: "hello"
+    }
+  }),
+  computed: {
+    ...mapGetters(["GetFavourite"])
+  },
+  methods: {
+    post() {
+      this.$http
+        .post(`http://localhost:3000/favourite`, this.obj)
+        .then(function(response) {
+          console.log(response);
+        });
     }
   }
-}
+};
 </script>

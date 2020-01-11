@@ -15,12 +15,12 @@
       <v-navigation-drawer permanent v-if="drawer" absolute class="side-bar">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">
-              Application
-            </v-list-item-title>
-            <v-list-item-subtitle>
+            <router-link to="/" @click.stop="ChangeDrawer"><v-list-item-title class="title">
+              На главную
+            </v-list-item-title></router-link>
+            <!-- <v-list-item-subtitle>
               subtext
-            </v-list-item-subtitle>
+            </v-list-item-subtitle> -->
           </v-list-item-content>
         </v-list-item>
 
@@ -28,15 +28,7 @@
 
         <v-list dense nav v-for="(item,index) in items" :key="index">
           <router-link :to="item.link"><v-list-item   link>
-            <!-- <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon> -->
-            <!-- <v-list-item-content> -->
               <v-list-item-title @click="ChangeDrawer"><h1>{{item.title}}</h1></v-list-item-title>
-              <!-- <router-link to="/LookingPage">
-                <div class="padInSideBar"><p v-for="(page,index) in article" :key="index" class=" white--text" @click="infor(index)">{{page.header}}</p></div>
-              </router-link> -->
-            <!-- </v-list-item-content> -->
           </v-list-item></router-link>
         </v-list>
       </v-navigation-drawer>
@@ -45,8 +37,6 @@
     <v-content class="pl-7">
       <router-view ></router-view>
     </v-content>
-
-     <!-- style="padding-bottom:100px !important;" -->
   </v-app>
 </template>
 
@@ -70,7 +60,7 @@ export default {
 methods:{
   ChangeDrawer(){
     this.drawer = !this.drawer
-  }
+  },
 }
 };
 </script>
