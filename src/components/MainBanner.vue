@@ -17,7 +17,7 @@
         <v-hover v-slot:default="{ hover }">
           <v-card :elevation="hover ? 24 : 2">
             <v-img
-              lazy-src="https://picsum.photos/id/237/200/300"
+              lazy-src="../assets/logo.png"
               :src="i"
               :aspect-ratio="16 / 9"
               min-height="112.5"
@@ -74,19 +74,33 @@
     <v-flex row justify-center>
       <!-- <p>{{ info.data }}</p> -->
       <el-pagination
+        @prev-click="payload.page -= 1"
+        @next-click="payload.page += 1"
         background
         layout="prev, pager, next"
-        :page-size="20"
-        :total="800"
-        :pager-count="8"
-        current-page=""
-
+        :page-size="this.payload.limit"
+        :total="this.info.length"
+        :current-page.sync="payload.page"
+        @current-change="ChangePage"
       >
-              <!-- :prev-click="PrevClick"
+        <!-- :prev-click="PrevClick"
         :next-click="NextClick" -->
       </el-pagination>
     </v-flex>
-    <p @click="GotoCard">Card</p>
+
+    <!-- <div class="block">
+      <span class="demonstration">All combined</span>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage4"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      >
+      </el-pagination>
+    </div> -->
   </div>
 </template>
 <script>
@@ -101,6 +115,7 @@ export default {
       .get(url + `articles`)
       .then(response => {
         this.info = response.data;
+
         console.log(this.info, "FAVOURITE1");
       })
       .catch(error => {})
@@ -128,16 +143,20 @@ export default {
     currentPage: 1,
     favourite: [],
     info: [],
+    info_length: 100,
     loading: "true",
-    page: 1,
     totalPhotos: "",
     arr: [],
     JsonParseOnce: false,
     getBanner: null,
     payload: {
-      page: 2,
-      limit: 3
-    }
+      page: 1,
+      limit: 20
+    },
+    currentPage1: 5,
+    currentPage2: 5,
+    currentPage3: 5,
+    currentPage4: 4
   }),
   methods: {
     ...mapMutations(["AddToFavourite", "SetListFavourite"]),
@@ -153,7 +172,8 @@ export default {
           .then(response => {
             console.log(response, "AAAAAAAAAAAAAAAA");
             this.info[index.id - 1].favourite = true;
-          });
+          })
+          .catch(console.log("JOPA"));
         // this.info[index.id].favourite = true;
         console.log(this.favourite, "This Favor1");
       } else {
@@ -162,6 +182,16 @@ export default {
         this.favourite.splice(index - 1, 1);
         console.log(this.favourite, "This Favor2");
       }
+    },
+    ChangePage() {
+      console.log(this.payload.page, this.payload.limit);
+      this.$http
+        .get(
+          `http://localhost:3000/articles/?page=${this.payload.page}&_limit=${this.payload.limit}`
+        )
+        .then(response => {
+          console.log(response.data);
+        });
     },
     SetListFavourite() {
       this.$store.commit("SetListFavourite", this.favourite);
@@ -174,6 +204,12 @@ export default {
     },
     NextClick() {
       console.log("NextClick");
+    },
+    handleSizeChange(val) {
+      console.log(`${val} items per page`);
+    },
+    handleCurrentChange(val) {
+      console.log(`current page: ${val}`);
     }
   },
   computed: {
@@ -181,6 +217,10 @@ export default {
     rows() {
       console.log(this.info, "THISINFOBRO");
       return Math.ceil(this.info.length / this.perPage);
+    },
+    Total() {
+      console.log(this.info.length / this.payload.limit);
+      return this.info.length / this.payload.limit;
     }
   },
   components: {
