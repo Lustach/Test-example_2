@@ -72,7 +72,6 @@ export default {
   data: () => ({
     some: "hell",
     post: {
-      // name:'',
     }
   }),
   created() {
@@ -85,8 +84,6 @@ export default {
         });
   },
   methods: {
-    // infor(){
-    // }
   }
 };
 </script>

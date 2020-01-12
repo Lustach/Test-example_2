@@ -79,9 +79,9 @@
         background
         layout="prev, pager, next"
         :page-size="this.payload.limit"
-        :total="this.info.length"
+        :total="100"
         :current-page.sync="payload.page"
-        @current-change="ChangePage"
+        @current-change="ChangePage()"
       >
         <!-- :prev-click="PrevClick"
         :next-click="NextClick" -->
@@ -112,30 +112,53 @@ export default {
     let url = "http://localhost:3000/";
     // .get('https://api.coindesk.com/v1/bpi/currentprice.json')
     this.$http
-      .get(url + `articles`)
+      .get(
+        url +
+          `articles` +
+          `?_page=${this.payload.page}&_limit=${this.payload.limit}`
+      )
       .then(response => {
         this.info = response.data;
-
         console.log(this.info, "FAVOURITE1");
+        this.$http.get(url + `favourite`).then(async response => {
+          this.favourite = await response.data;
+          console.log(response.data, "FAVOURITE!!!!!!!!!!!");
+          // let j = 0;
+          for (let i = 0; i < this.info.length; i++) {
+            for (let j = 0; j < this.favourite.length; j++) {
+              if (this.info[i].id == this.favourite[j].id) {
+                this.info[i].favourite = true;
+              }
+            }
+            // if (j < this.favourite.length) {
+            // console.log(this.info[i].id,'this.info[i].id');
+            // console.log(this.favourite[j].id,'this.favourite[i].id');
+            // if (this.info[i].id == this.favourite[j].id) {
+            //   this.info[i].favourite = true;
+            //   j--;
+            // }
+            // j++;
+            // }
+            // else{
+            //   break
+            // }
+          }
+          // for (let i = 0; i < this.favourite.length; i++) {
+          //   console.log(this.favourite.length);
+          //   // console.log(
+          //   //   this.info[this.favourite[i].id].favourite,
+          //   //   "this.info[this.favourite[i].id].favourite"
+          //   // );
+          //   // console.log(this.favourite[i].id,this.favourite[i].id);
+          //   // console.log(this.info[this.favourite[i].id - 1].favourite);
+          //   console.log(this.favourite, "wtf");
+          //   this.info[this.favourite[i].id - 1].favourite = true;
+          //   console.log(this.info[this.favourite[i].id - 1].favourite);
+          // }
+        });
       })
       .catch(error => {})
       .finally((this.loading = false));
-
-    this.$http.get(url + `favourite`).then(async response => {
-      this.favourite = await response.data;
-      console.log(response.data, "FAVOURITE!");
-      for (let i = 0; i < this.favourite.length; i++) {
-        console.log(this.favourite.length);
-        // console.log(
-        //   this.info[this.favourite[i].id].favourite,
-        //   "this.info[this.favourite[i].id].favourite"
-        // );
-        // console.log(this.favourite[i].id,this.favourite[i].id);
-        // console.log(this.info[this.favourite[i].id - 1].favourite);
-        this.info[this.favourite[i].id - 1].favourite = true;
-        console.log(this.info[this.favourite[i].id - 1].favourite);
-      }
-    });
   },
   created() {},
   data: () => ({
@@ -152,17 +175,12 @@ export default {
     payload: {
       page: 1,
       limit: 20
-    },
-    currentPage1: 5,
-    currentPage2: 5,
-    currentPage3: 5,
-    currentPage4: 4
+    }
   }),
   methods: {
     ...mapMutations(["AddToFavourite", "SetListFavourite"]),
     AddToFavourite(index) {
       //index- объект со всеми полями
-      console.log(this.favourite, "index");
       console.log(index.favourite, "This Favor");
       if (index.favourite == false) {
         console.log(index.favourite, "indexFavo");
@@ -171,12 +189,14 @@ export default {
           .post(`http://localhost:3000/favourite`, { id: index.id })
           .then(response => {
             console.log(response, "AAAAAAAAAAAAAAAA");
-            this.info[index.id - 1].favourite = true;
+            this.info[(index.id - 1) % 20].favourite = true;
           })
           .catch(console.log("JOPA"));
         // this.info[index.id].favourite = true;
         console.log(this.favourite, "This Favor1");
       } else {
+        console.log(index.id, "INDEX____ID");
+        console.log(this.info, "afterIndex");
         this.info[index.id - 1].favourite = false;
         this.$http.delete(`http://localhost:3000/favourite/${index.id}`);
         this.favourite.splice(index - 1, 1);
@@ -187,29 +207,22 @@ export default {
       console.log(this.payload.page, this.payload.limit);
       this.$http
         .get(
-          `http://localhost:3000/articles/?page=${this.payload.page}&_limit=${this.payload.limit}`
+          `http://localhost:3000/articles/?_page=${this.payload.page}&_limit=${this.payload.limit}`
         )
         .then(response => {
-          console.log(response.data);
+          this.info = response.data;
+          for (let i = 0; i < this.info.length; i++) {
+            for (let j = 0; j < this.favourite.length; j++) {
+              if (this.info[i].id == this.favourite[j].id) {
+                this.info[i].favourite = true;
+              }
+            }
+          }
+          console.log(this.favourite, "W");
         });
     },
     SetListFavourite() {
       this.$store.commit("SetListFavourite", this.favourite);
-    },
-    GotoCard() {
-      console.log(navigator.userAgent, "agent");
-    },
-    PrevClick() {
-      console.log("PrevClick");
-    },
-    NextClick() {
-      console.log("NextClick");
-    },
-    handleSizeChange(val) {
-      console.log(`${val} items per page`);
-    },
-    handleCurrentChange(val) {
-      console.log(`current page: ${val}`);
     }
   },
   computed: {
