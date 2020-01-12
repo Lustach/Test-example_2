@@ -50,7 +50,6 @@
         </v-container>
       </v-card>
     </v-col>
-    <p @click="post">Hell</p>
   </v-row>
 </template>
 <script>

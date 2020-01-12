@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/articles/:id',
     name: 'home',
     component: MainBanner,
   },

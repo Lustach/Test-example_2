@@ -1,27 +1,11 @@
 <template>
   <div>
-    <!--   <v-img cols="4"
-          min-height="100"
-          min-width="100"
-          max-height="200"
-          max-width="200"
-          :src="post.src"
-          
-        >
-        </v-img>
-        <v-card-text>
-          Hello
-        </v-card-text>
-        justify-center align-center//
-    </v-layout> -->
     <div class="d-inline-flex">
       <v-col cols="3">
         <v-img min-width="200" max-width="500" max-height="400" :src="post.src">
         </v-img>
         {{ post.name }}
-        <!-- <span>Hello</span> -->
       </v-col>
-      <!-- {{post.body}} -->
 
       <v-col cols="5">
         <v-card>
