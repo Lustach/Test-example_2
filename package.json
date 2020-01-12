@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "json-server": "json-server --watch db.js",
-    "test": "npm run json:server && npm run serve"
+    "test": "npm run json:server && npm run serve",
+    "deploy" : "bash deploy.sh"
   },
   "dependencies": {
     "axios": "^0.19.0",
