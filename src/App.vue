@@ -12,7 +12,7 @@
       </v-flex>
     </v-app-bar>
     <div>
-      <v-navigation-drawer permanent v-if="drawer" absolute class="side-bar">
+      <v-navigation-drawer permanent v-if="drawer" fixed class="side-bar">
         <v-list-item>
           <v-list-item-content>
             <router-link to="/articles/1" @click.stop="ChangeDrawer"><v-list-item-title class="title">
@@ -49,12 +49,14 @@ export default {
   components: {
     MainBanner
   },
-
+mounted(){
+      this.$router.push(`/articles/1`)
+},
   data: () => ({
     drawer: null,
     items: [
       { title: "Избранное", link:'/Favourite' },
-      { title: "Статьи", link:'LookingPage'}
+      // { title: "Статьи", link:'LookingPage'}
     ]
   }),
 methods:{
