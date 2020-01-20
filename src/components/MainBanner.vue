@@ -31,8 +31,6 @@
               }}</router-link>
               <v-btn text @click="AddToFavourite(i)"
                 >
-                <!-- {{ i.id }}
-                {{ i.favourite }} -->
                 <v-icon :color="i.favourite ? 'orange ' : 'black'"
                   >mdi-star</v-icon
                 >
