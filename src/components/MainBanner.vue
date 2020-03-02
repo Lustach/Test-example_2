@@ -72,10 +72,8 @@ export default {
       )
       .then(response => {
         this.info = response.data;
-        console.log(this.info, "info");
         this.$http.get(url + `favourite`).then(response => {
           this.favourite = response.data;
-          console.log(this.favourite, "favourite");
           for (let i = 0; i < this.info.length; i++) {
             for (let j = 0; j < this.favourite.length; j++) {
               if (this.info[i].id == this.favourite[j].id) {
@@ -93,7 +91,6 @@ export default {
     let url = "http://localhost:3000/";
     this.$http.get(url + `favourite`).then(response => {
       this.favourite = response.data;
-      console.log(this.favourite, "favourite");
       for (let i = 0; i < this.info.length; i++) {
         for (let j = 0; j < this.favourite.length; j++) {
           if (this.info[i].id == this.favourite[j].id) {
@@ -102,7 +99,6 @@ export default {
         }
       }
     });
-    console.log("Knigga");
   },
   created() {},
   data: () => ({
@@ -118,14 +114,10 @@ export default {
   methods: {
     AddToFavourite(index) {
       //index- объект со всеми полями (статья)
-      console.log(index.favourite, "This Favor");
       if (index.favourite == false) {
-        console.log(index.favourite, "indexFavo");
-        console.log(index.id, "index.id");
         this.$http
           .post(`http://localhost:3000/favourite`, { id: index.id })
           .then(response => {
-            console.log(response, "AAAAAAAAAAAAAAAA");
             this.info[(index.id - 1) % 20].favourite = true; //при рандомном айди делал бы линейный поиск
           })
           .catch();

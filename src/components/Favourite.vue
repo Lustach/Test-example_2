@@ -70,11 +70,6 @@ export default {
           });
       }
     });
-    // for (let i = 0; i < this.info.length; i++) {
-    //   if (Number.isInteger(JSON.parse(localStorage.getItem(i)))) {
-    //     this.favourite.push(this.info.data[i]);
-    //   }
-    // }
   },
   data: () => ({
     info: [],
@@ -88,14 +83,8 @@ export default {
         this.$http.delete(`http://localhost:3000/favourite/${index}`);
         this.info.splice(n, 1);
     },
-    post() {
-      // .post(`http://localhost:3000/favourite`, this.obj)
-      // .then(function(response) {
-      //   console.log(response);
-      // })
-      // .catch(function(error){
-      // })
-    }
+    // post() {
+    // }
   }
 };
 </script>

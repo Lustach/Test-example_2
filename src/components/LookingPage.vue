@@ -59,12 +59,11 @@ export default {
     }
   }),
   created() {
-    console.log(this.$route.params.id, "params id"),
       this.$http
         .get(`http://localhost:3000/articles/${this.$route.params.id}`)
         .then(response => {
           this.post = response.data;
-          console.log(response, "response");
+
         });
   },
   methods: {

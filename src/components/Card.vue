@@ -6,11 +6,6 @@
           <img :src="photo.urls.small" alt="" />
         </div>
         <div class="card__footer media">
-          <!-- <img
-            :src="photo.name"
-            alt=""
-            class="media__obj"
-          /> -->
           <div class="media__body">
             <a :href="photo.user.portfolio_url" target="_blank">{{
               photo.user.name
